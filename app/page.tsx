@@ -5,6 +5,7 @@ import TodoList from '@/components/TodoList';
 import AddTodo from '@/components/AddTodo';
 import FilterBar from '@/components/FilterBar';
 import ShortcutsModal from '@/components/ShortcutsModal';
+import ParticleBackground from '@/components/ParticleBackground';
 import { Todo, FilterType } from '@/types/todo';
 
 export default function Home() {
@@ -61,14 +62,12 @@ export default function Home() {
       const tag = (e.target as HTMLElement).tagName.toLowerCase();
       const isTyping = tag === 'input' || tag === 'textarea';
 
-      // ? — show shortcuts modal
       if (e.key === '?' && !isTyping) {
         e.preventDefault();
         setShowShortcuts((v) => !v);
         return;
       }
 
-      // Escape — close shortcuts modal
       if (e.key === 'Escape') {
         setShowShortcuts(false);
         return;
@@ -76,35 +75,30 @@ export default function Home() {
 
       if (isTyping) return;
 
-      // N — focus add input
       if (e.key === 'n' || e.key === 'N') {
         e.preventDefault();
         addInputRef.current?.focus();
         return;
       }
 
-      // 1 — filter all
       if (e.key === '1') {
         e.preventDefault();
         setFilter('all');
         return;
       }
 
-      // 2 — filter active
       if (e.key === '2') {
         e.preventDefault();
         setFilter('active');
         return;
       }
 
-      // 3 — filter completed
       if (e.key === '3') {
         e.preventDefault();
         setFilter('completed');
         return;
       }
 
-      // X — clear completed
       if (e.key === 'x' || e.key === 'X') {
         e.preventDefault();
         clearCompleted();
@@ -117,57 +111,60 @@ export default function Home() {
   }, [clearCompleted]);
 
   return (
-    <main className="min-h-screen py-12 px-4">
-      <div className="max-w-lg mx-auto">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <h1 className="text-5xl font-extrabold text-indigo-600 tracking-tight">
-              My Todos
-            </h1>
-            <button
-              onClick={() => setShowShortcuts(true)}
-              title="Keyboard shortcuts (?)"
-              className="mt-1 text-xs font-semibold text-gray-400 border border-gray-300 rounded-lg px-2 py-1 hover:text-indigo-500 hover:border-indigo-400 transition-colors"
-            >
-              shortcuts
-            </button>
+    <>
+      <ParticleBackground />
+      <main className="relative min-h-screen py-12 px-4" style={{ zIndex: 1 }}>
+        <div className="max-w-lg mx-auto">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <h1 className="text-5xl font-extrabold text-indigo-600 tracking-tight">
+                My Todos
+              </h1>
+              <button
+                onClick={() => setShowShortcuts(true)}
+                title="Keyboard shortcuts (?)"
+                className="mt-1 text-xs font-semibold text-gray-400 border border-gray-300 rounded-lg px-2 py-1 hover:text-indigo-500 hover:border-indigo-400 transition-colors"
+              >
+                shortcuts
+              </button>
+            </div>
+            <p className="text-gray-500 text-sm">
+              {activeCount} task{activeCount !== 1 ? 's' : ''} remaining
+            </p>
           </div>
-          <p className="text-gray-500 text-sm">
-            {activeCount} task{activeCount !== 1 ? 's' : ''} remaining
-          </p>
+
+          {/* Add Todo */}
+          <AddTodo onAdd={addTodo} inputRef={addInputRef} />
+
+          {/* Filter Bar */}
+          <FilterBar
+            filter={filter}
+            onFilterChange={setFilter}
+            activeCount={activeCount}
+            completedCount={completedCount}
+            onClearCompleted={clearCompleted}
+          />
+
+          {/* Todo List */}
+          <TodoList
+            todos={filteredTodos}
+            onToggle={toggleTodo}
+            onDelete={deleteTodo}
+            onEdit={editTodo}
+          />
+
+          {/* Empty state */}
+          {todos.length === 0 && (
+            <div className="text-center mt-12">
+              <p className="text-gray-400 text-lg font-medium">No tasks yet. Add one above.</p>
+            </div>
+          )}
         </div>
 
-        {/* Add Todo */}
-        <AddTodo onAdd={addTodo} inputRef={addInputRef} />
-
-        {/* Filter Bar */}
-        <FilterBar
-          filter={filter}
-          onFilterChange={setFilter}
-          activeCount={activeCount}
-          completedCount={completedCount}
-          onClearCompleted={clearCompleted}
-        />
-
-        {/* Todo List */}
-        <TodoList
-          todos={filteredTodos}
-          onToggle={toggleTodo}
-          onDelete={deleteTodo}
-          onEdit={editTodo}
-        />
-
-        {/* Empty state */}
-        {todos.length === 0 && (
-          <div className="text-center mt-12">
-            <p className="text-gray-400 text-lg font-medium">No tasks yet. Add one above.</p>
-          </div>
-        )}
-      </div>
-
-      {/* Shortcuts Modal */}
-      <ShortcutsModal open={showShortcuts} onClose={() => setShowShortcuts(false)} />
-    </main>
+        {/* Shortcuts Modal */}
+        <ShortcutsModal open={showShortcuts} onClose={() => setShowShortcuts(false)} />
+      </main>
+    </>
   );
 }
