@@ -6,6 +6,7 @@ import AddTodo from '@/components/AddTodo';
 import FilterBar from '@/components/FilterBar';
 import ShortcutsModal from '@/components/ShortcutsModal';
 import ParticleBackground from '@/components/ParticleBackground';
+import DarkModeToggle from '@/components/DarkModeToggle';
 import { Todo, FilterType } from '@/types/todo';
 
 function useDarkMode() {
@@ -15,6 +16,10 @@ function useDarkMode() {
     const stored = localStorage.getItem('theme');
     if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       setIsDark(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setIsDark(false);
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
@@ -163,14 +168,7 @@ export default function Home() {
                 >
                   shortcuts
                 </button>
-                <button
-                  onClick={toggleDark}
-                  title="Toggle dark mode (D)"
-                  className="text-xs font-semibold text-gray-400 dark:text-gray-500 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors"
-                  aria-label="Toggle dark mode"
-                >
-                  {isDark ? 'light mode' : 'dark mode'}
-                </button>
+                <DarkModeToggle isDark={isDark} onToggle={toggleDark} />
               </div>
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm">
