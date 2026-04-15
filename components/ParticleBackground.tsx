@@ -11,8 +11,17 @@ interface Particle {
   opacity: number;
 }
 
-export default function ParticleBackground() {
+interface ParticleBackgroundProps {
+  isDark: boolean;
+}
+
+export default function ParticleBackground({ isDark }: ParticleBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isDarkRef = useRef(isDark);
+
+  useEffect(() => {
+    isDarkRef.current = isDark;
+  }, [isDark]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,6 +59,9 @@ export default function ParticleBackground() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      const dark = isDarkRef.current;
+      const particleColor = dark ? '139, 92, 246' : '99, 102, 241';
+
       // Draw connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -58,9 +70,9 @@ export default function ParticleBackground() {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < CONNECTION_DISTANCE) {
-            const alpha = (1 - dist / CONNECTION_DISTANCE) * 0.08;
+            const alpha = (1 - dist / CONNECTION_DISTANCE) * (dark ? 0.12 : 0.08);
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
+            ctx.strokeStyle = `rgba(${particleColor}, ${alpha})`;
             ctx.lineWidth = 1;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -73,7 +85,7 @@ export default function ParticleBackground() {
       for (const p of particles) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(99, 102, 241, ${p.opacity})`;
+        ctx.fillStyle = `rgba(${particleColor}, ${p.opacity})`;
         ctx.fill();
 
         // Move

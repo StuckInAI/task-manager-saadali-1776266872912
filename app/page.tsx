@@ -8,11 +8,39 @@ import ShortcutsModal from '@/components/ShortcutsModal';
 import ParticleBackground from '@/components/ParticleBackground';
 import { Todo, FilterType } from '@/types/todo';
 
+function useDarkMode() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setIsDark(true);
+    }
+  }, []);
+
+  const toggle = useCallback(() => {
+    setIsDark((prev) => {
+      const next = !prev;
+      if (next) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+      return next;
+    });
+  }, []);
+
+  return { isDark, toggle };
+}
+
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterType>('all');
   const [showShortcuts, setShowShortcuts] = useState(false);
   const addInputRef = useRef<HTMLInputElement>(null);
+  const { isDark, toggle: toggleDark } = useDarkMode();
 
   const addTodo = (text: string) => {
     const newTodo: Todo = {
@@ -104,32 +132,48 @@ export default function Home() {
         clearCompleted();
         return;
       }
+
+      if (e.key === 'd' || e.key === 'D') {
+        e.preventDefault();
+        toggleDark();
+        return;
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [clearCompleted]);
+  }, [clearCompleted, toggleDark]);
 
   return (
     <>
-      <ParticleBackground />
+      <ParticleBackground isDark={isDark} />
       <main className="relative min-h-screen py-12 px-4" style={{ zIndex: 1 }}>
         <div className="max-w-lg mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-3 mb-2">
-              <h1 className="text-5xl font-extrabold text-indigo-600 tracking-tight">
+              <h1 className="text-5xl font-extrabold text-indigo-600 dark:text-indigo-400 tracking-tight">
                 My Todos
               </h1>
-              <button
-                onClick={() => setShowShortcuts(true)}
-                title="Keyboard shortcuts (?)"
-                className="mt-1 text-xs font-semibold text-gray-400 border border-gray-300 rounded-lg px-2 py-1 hover:text-indigo-500 hover:border-indigo-400 transition-colors"
-              >
-                shortcuts
-              </button>
+              <div className="flex items-center gap-2 mt-1">
+                <button
+                  onClick={() => setShowShortcuts(true)}
+                  title="Keyboard shortcuts (?)"
+                  className="text-xs font-semibold text-gray-400 dark:text-gray-500 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors"
+                >
+                  shortcuts
+                </button>
+                <button
+                  onClick={toggleDark}
+                  title="Toggle dark mode (D)"
+                  className="text-xs font-semibold text-gray-400 dark:text-gray-500 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors"
+                  aria-label="Toggle dark mode"
+                >
+                  {isDark ? 'light mode' : 'dark mode'}
+                </button>
+              </div>
             </div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
               {activeCount} task{activeCount !== 1 ? 's' : ''} remaining
             </p>
           </div>
@@ -157,7 +201,7 @@ export default function Home() {
           {/* Empty state */}
           {todos.length === 0 && (
             <div className="text-center mt-12">
-              <p className="text-gray-400 text-lg font-medium">No tasks yet. Add one above.</p>
+              <p className="text-gray-400 dark:text-gray-500 text-lg font-medium">No tasks yet. Add one above.</p>
             </div>
           )}
         </div>

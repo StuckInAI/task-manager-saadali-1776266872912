@@ -26,11 +26,11 @@ export default function AddTodo({ onAdd, inputRef }: AddTodoProps) {
         value={inputValue}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
         placeholder="Add a new task..."
-        className="flex-1 px-5 py-3 rounded-2xl border border-gray-200 bg-white shadow-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-all"
+        className="flex-1 px-5 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 focus:border-transparent transition-all"
       />
       <button
         type="submit"
-        className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-2xl shadow-sm transition-all duration-200 active:scale-95 disabled:opacity-50"
+        className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white font-semibold rounded-2xl shadow-sm transition-all duration-200 active:scale-95 disabled:opacity-50"
         disabled={!inputValue.trim()}
       >
         Add

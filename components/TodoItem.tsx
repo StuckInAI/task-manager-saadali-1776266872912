@@ -30,14 +30,14 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
   };
 
   return (
-    <li className="group flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-sm border border-gray-100 hover:border-indigo-100 hover:shadow-md transition-all duration-200">
+    <li className="group flex items-center gap-3 bg-white dark:bg-gray-800 rounded-2xl px-4 py-3 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-indigo-100 dark:hover:border-indigo-700 hover:shadow-md transition-all duration-200">
       {/* Checkbox */}
       <button
         onClick={() => onToggle(todo.id)}
         className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
           todo.completed
-            ? 'bg-indigo-500 border-indigo-500'
-            : 'border-gray-300 hover:border-indigo-400'
+            ? 'bg-indigo-500 border-indigo-500 dark:bg-indigo-600 dark:border-indigo-600'
+            : 'border-gray-300 dark:border-gray-600 hover:border-indigo-400 dark:hover:border-indigo-500'
         }`}
         aria-label={todo.completed ? 'Mark as incomplete' : 'Mark as complete'}
       >
@@ -63,11 +63,11 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
             value={editValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditValue(e.target.value)}
             onKeyDown={handleEditKeyDown}
-            className="flex-1 px-3 py-1 text-sm border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="flex-1 px-3 py-1 text-sm border border-indigo-300 dark:border-indigo-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
           />
           <button
             type="submit"
-            className="text-xs px-3 py-1 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors"
+            className="text-xs px-3 py-1 bg-indigo-500 dark:bg-indigo-600 text-white rounded-lg hover:bg-indigo-600 dark:hover:bg-indigo-500 transition-colors"
           >
             Save
           </button>
@@ -77,7 +77,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
               setEditValue(todo.text);
               setIsEditing(false);
             }}
-            className="text-xs px-3 py-1 bg-gray-100 text-gray-500 rounded-lg hover:bg-gray-200 transition-colors"
+            className="text-xs px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
           >
             Cancel
           </button>
@@ -85,7 +85,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
       ) : (
         <span
           className={`flex-1 text-sm font-medium transition-all duration-200 ${
-            todo.completed ? 'line-through text-gray-400' : 'text-gray-700'
+            todo.completed ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-700 dark:text-gray-200'
           }`}
         >
           {todo.text}
@@ -97,7 +97,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
             onClick={() => setIsEditing(true)}
-            className="p-1.5 text-gray-400 hover:text-indigo-500 rounded-lg hover:bg-indigo-50 transition-colors"
+            className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-indigo-500 dark:hover:text-indigo-400 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/40 transition-colors"
             aria-label="Edit task"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -110,7 +110,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
           </button>
           <button
             onClick={() => onDelete(todo.id)}
-            className="p-1.5 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
+            className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
             aria-label="Delete task"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

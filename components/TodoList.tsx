@@ -14,7 +14,7 @@ export default function TodoList({ todos, onToggle, onDelete, onEdit }: TodoList
   if (todos.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-400 text-base">No tasks here yet.</p>
+        <p className="text-gray-400 dark:text-gray-500 text-base">No tasks here yet.</p>
       </div>
     );
   }
