@@ -7,11 +7,7 @@ import FilterBar from '@/components/FilterBar';
 import { Todo, FilterType } from '@/types/todo';
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>([
-    { id: '1', text: 'Buy groceries', completed: false, createdAt: new Date() },
-    { id: '2', text: 'Read a book', completed: true, createdAt: new Date() },
-    { id: '3', text: 'Go for a walk', completed: false, createdAt: new Date() },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterType>('all');
 
   const addTodo = (text: string) => {
