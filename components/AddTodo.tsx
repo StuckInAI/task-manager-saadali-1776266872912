@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 
-export default function AddTodo({ onAdd }: { onAdd: (text: string) => void }) {
+interface AddTodoProps {
+  onAdd: (text: string) => void;
+  inputRef: React.RefObject<HTMLInputElement>;
+}
+
+export default function AddTodo({ onAdd, inputRef }: AddTodoProps) {
   const [inputValue, setInputValue] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -16,6 +21,7 @@ export default function AddTodo({ onAdd }: { onAdd: (text: string) => void }) {
   return (
     <form onSubmit={handleSubmit} className="flex gap-3 mb-6">
       <input
+        ref={inputRef}
         type="text"
         value={inputValue}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
